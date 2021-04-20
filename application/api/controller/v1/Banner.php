@@ -27,16 +27,15 @@ class Banner
         return $banner;
 //        return $id;
         //独立验证
-//        $data = [
-//            'id'=> $id,
-//        ];
+
 ////        $validate = new Validate([
 ////            'name'=> 'require|max:10',
 ////            'email'=>'email'
 ////        ]);
 //        $validate = new IDMustBePositiveInt();
 //        $result = $validate->batch()->check($data);
-////        echo $validate->getError();
+//        var_dump($result);
+//        echo $validate->getError();
 ////        var_dump($validate->getError());
 //        if($result){
 //            echo 1;
