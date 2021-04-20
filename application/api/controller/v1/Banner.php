@@ -7,6 +7,7 @@ namespace app\api\controller\v1;
 use app\api\controller\validate\IDMustBePositiveInt;
 use app\api\model\Banner as BannerModel;
 use app\lib\exception\BannerMissException;
+use think\Exception;
 
 class Banner
 {
@@ -19,12 +20,18 @@ class Banner
     public function getBanner($id)
     {
 
-        (new IDMustBePositiveInt())->goCheck();
-        $banner = BannerModel::getBannerById($id);
-        if(!$banner){
-            throw new BannerMissException();
+//        (new IDMustBePositiveInt())->goCheck();
+        if(is_numeric($id) && is_int($id + 0) >0){
+            $banner = BannerModel::getBannerById($id);
+            if(!$banner){
+                throw new BannerMissException();
+            }
+            return $banner;
+        }else{
+            throw new Exception('参数必须是整数');
         }
-        return $banner;
+
+
 //        return $id;
         //独立验证
 
