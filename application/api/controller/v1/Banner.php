@@ -22,11 +22,13 @@ class Banner
 
 //        (new IDMustBePositiveInt())->goCheck();
         if(is_numeric($id) && is_int($id + 0) >0){
+//            $banner = BannerModel::with(['items','items.img'])->find($id);
             $banner = BannerModel::getBannerById($id);
             if(!$banner){
                 throw new BannerMissException();
             }
             return $banner;
+//            return json($banner);
         }else{
             throw new Exception('参数必须是整数');
         }

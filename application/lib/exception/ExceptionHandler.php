@@ -17,7 +17,7 @@ class ExceptionHandler extends Handle
 
     //返回客户端当前需要的URL路径
 
-    public function render(Exception $e)
+    public function render(\Exception $e)
     {
         if ($e instanceof BaseException) {
             //自定义异常处理
@@ -47,7 +47,7 @@ class ExceptionHandler extends Handle
     }
 
     //自定义日志
-    private function recordErrorLog(Exception $e){
+    private function recordErrorLog(\Exception $e){
         //初始化日志
         Log::init([
             'type' => 'File',
