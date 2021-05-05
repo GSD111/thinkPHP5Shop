@@ -11,7 +11,6 @@ class Theme extends BaseModel
 
     public function topicImg()
     {
-
         return $this->belongsTo('Image', 'topic_img_id', 'id');
     }
 
@@ -21,6 +20,14 @@ class Theme extends BaseModel
     }
 
     public function products(){
+
         return $this->belongsToMany('Product','theme_product','product_id','theme_id');
+    }
+
+    public static function getThemeWithProduct($id){
+
+        $theme = self::with('products,topicImg,headImg')->find($id);
+
+        return $theme;
     }
 }
