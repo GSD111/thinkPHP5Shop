@@ -29,7 +29,7 @@ class Theme
 
     /*
      * 获取某一个主题下的所有产品
-     * @url theme/1 ....
+     * @url theme/:id ....
      */
     public function getComplexOne($id)
     {
