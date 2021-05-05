@@ -24,4 +24,8 @@ class Theme
         }
         return $result;
     }
+
+    public function getComplexOne(){
+        return '1111';
+    }
 }
