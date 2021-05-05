@@ -1,7 +1,7 @@
 <?php
 
 
-namespace app\api\controller\validate;
+namespace app\api\validate;
 
 
 use app\lib\exception\ParameterException;
@@ -18,7 +18,7 @@ class BaseValidate extends Validate
 
         //验证接收到的参数
         $result = $this->batch()->check($params);
-//        var_dump($result);die;
+//        var_dump($params);die;
         if (!$result) {
             $e = new ParameterException([
                 'msg' => $this->error
@@ -27,5 +27,16 @@ class BaseValidate extends Validate
         } else {
             return true;
         }
+    }
+
+    protected function isPositiveInteger($value, $rule = '', $data = '', $field = '')
+    {
+//        var_dump($value,$field);die;
+        if (is_numeric($value) && is_int($value + 0) && ($value + 0) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+//        return $field . '必须是正整数';
     }
 }

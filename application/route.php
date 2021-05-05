@@ -13,4 +13,5 @@ use think\Route;
 
 //Route::rule('hello/:id','api/Test/hello');
 
-Route::get('/:version/banner/:id','api/:version.Banner/getBanner');
+Route::get('api/:version/banner/:id','api/:version.Banner/getBanner');
+Route::get('api/:version/theme','api/:version.Theme/getSimpleList');
