@@ -7,12 +7,19 @@ namespace app\api\model;
 class Banner extends BaseModel
 {
     protected $hidden=['id','update_time','delete_time'];
-    //定义关联模型
+
+    /*
+     * 定义关联模型
+     */
     public function items()
     {
         return $this->hasMany('BannerItem', 'banner_id', 'id');
     }
 
+    /*
+     * 获取传入的ID值获取对应的banner信息
+     * @param string $id
+     */
     public static function getBannerById($id)
     {
         //根据ID 查询对应的banner信息

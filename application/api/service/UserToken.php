@@ -4,6 +4,7 @@
 namespace app\api\service;
 
 
+use app\api\model\User as UserModel;
 use app\lib\exception\WeChatException;
 use think\Exception;
 
@@ -76,6 +77,41 @@ class UserToken
         //3.若果存在则不处理，不存在则添加一条user记录
         //4.生成令牌，准备缓存数据，写入缓存
         //5.将token令牌返回到客户端
+        $openid = $wxResult['openid'];
+        $user = UserModel::getByOpenID($openid);
+        if ($user) {
+            $uid = $user->id;
+        } else {
+            $uid = $this->newUser($openid);
+        }
+        $cacheValue = $this->prepareCacheValue($wxResult,$uid);
+    }
+
+    /*
+     * 准备缓存数据
+     * @param array $wxResult
+     * @param string $uid
+     */
+    private function prepareCacheValue($wxResult, $uid)
+    {
+        $CacheValue = $wxResult;
+        $CacheValue['uid'] = $uid;
+        $CacheValue['scope'] = 16;
+
+        return $CacheValue;
+    }
+
+    /*
+     * @param string $openid
+     * 插入一条新的用户信息并且将新插入的用户ID返回
+     */
+    private function newUser($openid)
+    {
+        $user = UserModel::create([
+            'openid' => $openid,
+        ]);
+
+        return $user->id;
     }
 
     /*

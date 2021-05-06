@@ -8,6 +8,9 @@ use app\lib\exception\CategoryException;
 
 class Category
 {
+    /*
+     * 获取分类列表
+     */
     public function getAllCategories()
     {
         $categories = CategoryModel::all([], 'img');
