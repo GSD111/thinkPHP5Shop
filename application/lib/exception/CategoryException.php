@@ -4,6 +4,9 @@
 namespace app\lib\exception;
 
 
+/*
+ * 分类异常
+ */
 class CategoryException extends BaseException
 {
     public $code = 404;

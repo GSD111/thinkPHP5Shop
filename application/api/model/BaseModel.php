@@ -6,8 +6,9 @@ use think\Model;
 
 class BaseModel extends Model
 {
-    //封装读取器函数
-
+    /*
+     * 封装读取器函数
+     */
     protected function prefixImgUrl($value,$data){
         $finalUrl = $value;
         if($data['from'] == 1){

@@ -13,7 +13,7 @@ class Product
 {
 
     /*
-     * $count 获取的数量 默认获取15条
+     * @param string $count 获取的数量 默认获取15条
      * 获取最新产品的信息
      */
     public function getRecent($count = 15)
@@ -29,7 +29,7 @@ class Product
     }
 
     /*
-     * @id 分类的ID
+     * @param string $id 分类的ID
      * 获取分类下面的商品信息
      */
     public function getAllInCategory($id)

@@ -34,7 +34,9 @@ class UserToken
         return $file_contents;
     }
 
-
+    /*
+     * 初始化加载WeChat配置信息
+     */
     function __construct($code)
     {
         $this->code = $code;
@@ -43,6 +45,10 @@ class UserToken
         $this->wxLoginUrl = sprintf(config('wx.login_url'), $this->wxAppId, $this->wxAppSecret, $this->code);
     }
 
+    /*
+     * @param array $wxResult 根据用户请求微信端返回的数据集
+     * 获取微信用户的身份信息
+     */
     public function getUserToken()
     {
         $result = $this->curl_get($this->wxLoginUrl);
@@ -59,6 +65,10 @@ class UserToken
         }
     }
 
+    /*
+     * @param array $wxResult 根据用户请求微信端返回的数据集
+     * 获取到微信用户信息后颁发Token令牌
+     */
     private function grantToken($wxResult)
     {
         //1.拿到openID
@@ -68,6 +78,10 @@ class UserToken
         //5.将token令牌返回到客户端
     }
 
+    /*
+     * @param array $wxResult 根据用户请求微信端返回的数据集
+     * 获取用户信息错误将错误信息返回
+     */
     private function processLoginError($wxResult)
     {
         throw new WeChatException([

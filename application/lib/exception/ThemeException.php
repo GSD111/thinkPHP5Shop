@@ -3,7 +3,9 @@
 
 namespace app\lib\exception;
 
-
+/*
+ * 主题异常
+ */
 class ThemeException extends BaseException
 {
     public $code = 404;

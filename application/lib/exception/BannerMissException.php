@@ -3,7 +3,9 @@
 
 namespace app\lib\exception;
 
-
+/*
+ * Banner异常
+ */
 class BannerMissException extends BaseException
 {
     public $code = 404;

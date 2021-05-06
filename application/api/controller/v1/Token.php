@@ -9,6 +9,10 @@ use app\api\validate\TokenGet;
 
 class Token
 {
+    /*
+     * @param string $code
+     * 获取Token信息
+     */
     public function getToken($code = '')
     {
         (new TokenGet())->goCheck();
