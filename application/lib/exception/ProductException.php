@@ -4,6 +4,9 @@
 namespace app\lib\exception;
 
 
+/*
+ * 产品信息异常
+ */
 class ProductException extends BaseException
 {
     public $code = 404;

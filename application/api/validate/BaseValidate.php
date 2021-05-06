@@ -39,4 +39,14 @@ class BaseValidate extends Validate
         }
 //        return $field . '必须是正整数';
     }
+
+    protected function isNotEmpty($value, $rule = '', $data = '', $field = '')
+    {
+//        var_dump($value,$field);die;
+        if (empty($value)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
