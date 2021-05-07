@@ -19,6 +19,8 @@ class Token
         $ut = new UserToken($code);
         $token = $ut->getUserToken();
 
-        return $token;
+        return [
+            'token' => $token
+        ];
     }
 }
