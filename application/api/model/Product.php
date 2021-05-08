@@ -31,6 +31,23 @@ class Product extends BaseModel
     }
 
     /*
+     * 关联商品的图片模型
+     */
+    public function productImgs()
+    {
+        return $this->hasMany('ProductImage', 'product_id', 'id');
+    }
+
+    /*
+     * 关联商品的属性模型
+     */
+
+    public function properties()
+    {
+        return $this->hasMany('ProductProperty', 'product_id', 'id');
+    }
+
+    /*
      * @param string $categoryId  分类的ID
      * 根据分类ID获取对应分类下的商品信息
      */
@@ -40,5 +57,17 @@ class Product extends BaseModel
         $products = self::where('category_id', '=', $categoryId)->select();
 
         return $products;
+    }
+
+    /*
+     * @param string $id  商品的ID
+     * 根据分类ID获取对应分类下的商品信息
+     */
+
+    public static function getProductDetail($id)
+    {
+        $productDetail = self::with('productImgs,properties')->find($id);
+
+        return $productDetail;
     }
 }

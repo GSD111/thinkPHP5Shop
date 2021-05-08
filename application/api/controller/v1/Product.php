@@ -6,7 +6,6 @@ namespace app\api\controller\v1;
 
 use app\api\model\Product as ProductModel;
 use app\api\validate\Count;
-use app\api\validate\IDMustBePositiveInt;
 use app\lib\exception\ProductException;
 
 class Product
@@ -44,5 +43,20 @@ class Product
         $products = $products->hidden(['summary']);
 
         return $products;
+    }
+
+    /*
+     * 获取某一产品的详细信息
+     */
+    public function getOne($id)
+    {
+//        (new IDMustBePositiveInt())->goCheck();
+
+        $productDetail = ProductModel::getProductDetail($id);
+        if (!$productDetail) {
+            throw new ProductException();
+        }
+
+        return $productDetail;
     }
 }
