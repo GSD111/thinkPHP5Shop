@@ -46,7 +46,8 @@ class Product
     }
 
     /*
-     * 获取某一产品的详细信息
+     * @param string $id
+     * 根据商品的id获取对应产品的详细信息
      */
     public function getOne($id)
     {
