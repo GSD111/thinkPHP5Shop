@@ -3,15 +3,44 @@
 
 namespace app\api\controller\v1;
 
+use app\api\model\User as UserModel;
 use app\api\service\Token as TokenService;
 use app\api\validate\AddressNew;
-use app\api\model\User as UserModel;
+use app\lib\enum\ScopeEnum;
+use app\lib\exception\ForbiddenException;
 use app\lib\exception\SuccessMessage;
+use app\lib\exception\TokenException;
 use app\lib\exception\UserException;
-use app\api\model\UserAddress as AddressModel;
+use think\Controller;
 
-class Address
+class Address extends Controller
 {
+
+    /*
+     * 前置方法
+     */
+    protected $beforeActionList = [
+        'checkPrimaryScope' => ['only' => 'createOrUpdateAddress']
+    ];
+
+    /*
+     * 验证用户的权限值
+     */
+    protected function checkPrimaryScope()
+    {
+        $scope = TokenService::getCurrentTokenVal('scope');
+        if ($scope) {
+            if ($scope >= ScopeEnum::User) {
+                return true;
+            } else {
+                throw new ForbiddenException();
+            }
+        } else {
+            throw new TokenException();
+        }
+
+    }
+
 
     /*
      * 创建或者修改用户地址
@@ -41,6 +70,6 @@ class Address
 //          AddressModel::update($dataArray);
         }
 
-        return json(new SuccessMessage(),201);
+        return json(new SuccessMessage(), 201);
     }
 }
