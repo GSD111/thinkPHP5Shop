@@ -45,7 +45,7 @@ class Pay
     }
 
     /*
-     * 提交订单调用微信支付
+     * 构建微信支付订单信息
      */
     private function makeWxPreOrder()
     {
