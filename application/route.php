@@ -13,8 +13,10 @@ use think\Route;
 
 //Route::rule('hello/:id','api/Test/hello');
 
+//Banner
 Route::get('api/:version/banner/:id','api/:version.Banner/getBanner');
 
+//Theme
 Route::get('api/:version/theme','api/:version.Theme/getSimpleList');
 Route::get('api/:version/theme/:id','api/:version.Theme/getComplexOne');
 
@@ -30,11 +32,16 @@ Route::group('api/:version/product',function(){
     Route::get('/recent','api/:version.Product/getRecent');
 });
 
+//Category
 Route::get('api/:version/category/all','api/:version.Category/getAllCategories');
 
+//Token
 Route::post('api/:version/token/user','api/:version.Token/getToken');
 
+//Address
 Route::post('api/:version/address','api/:version.Address/createOrUpdateAddress');
 //Route::get('api/:version/second','api/:version.Address/second');
 
+
+//Order
 Route::post('api/:version/order','api/:version.Order/placeOrder');
