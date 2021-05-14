@@ -134,6 +134,21 @@ class Order
     }
 
     /*
+     * 支付时再次检测订单商品的库存量
+     * @param string $orderID
+     */
+    public function checkOrderStock($orderID)
+    {
+        $oProducts = OrderProduct::where('order_id', '=', $orderID)->select();
+        $this->oProducts = $oProducts;
+        $this->products = $this->getProductsByOrder($oProducts);
+
+        $status = $this->getOrderStatus();
+
+        return $status;
+    }
+
+    /*
      * 获取订单的状态
      */
     private function getOrderStatus()

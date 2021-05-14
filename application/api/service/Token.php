@@ -98,4 +98,22 @@ class Token
         }
     }
 
+    /*
+     * 检测用户是否合法
+     * @param string $checkUID
+     */
+    public static function isValidOperate($checkUID)
+    {
+        if (!$checkUID) {
+            throw new Exception('检查UID时必须传入一个被检测的UID');
+        }
+
+        $currentOperateUID = self::getCurrentUid();
+        if ($currentOperateUID == $checkUID) {
+            return true;
+        }
+
+        return false;
+    }
+
 }
