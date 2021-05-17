@@ -12,8 +12,9 @@ use app\lib\exception\OrderException;
 use app\lib\exception\TokenException;
 use think\Exception;
 use think\Loader;
+use think\Log;
 
-Loader::import('WxPay.WxPay',EXTEND_PATH,'.Api.php');   //引入微信支付SDK
+Loader::import('WxPay.WxPay', EXTEND_PATH, '.Api.php');   //引入微信支付SDK
 
 class Pay
 {
@@ -42,12 +43,15 @@ class Pay
 
             return $status;
         }
+
+        return $this->makeWxPreOrder($status['orderPrice']);
     }
 
     /*
      * 构建微信支付订单信息
+     * @param string $totalPrice 订单支付总金额
      */
-    private function makeWxPreOrder()
+    private function makeWxPreOrder($totalPrice)
     {
         //获取用户的openID
         $openId = TokenService::getCurrentTokenVal('openid');
@@ -55,6 +59,62 @@ class Pay
             throw new TokenException();
         }
         $wxOrderData = new \WxPayUnifiedOrder();
+        $wxOrderData->SetOut_trade_no($this->orderNO);
+        $wxOrderData->SetTrade_type('JSAPI');
+        $wxOrderData->SetTotal_fee($totalPrice * 100);
+        $wxOrderData->SetBody('零食商贩');
+        $wxOrderData->SetOpenid($openId);
+        $wxOrderData->SetNotify_url('');
+        return $this->getPaySignature($wxOrderData);
+    }
+
+    /*
+     * 获取微信支付签名
+     * @param array $wxOrderData 支付订单信息
+     */
+    private function getPaySignature($wxOrderData)
+    {
+
+        $wxOrder = \WxPayApi::unifiedOrder($wxOrderData);
+        if ($wxOrder['return_code'] != 'SUCCESS' || $wxOrder['result_code'] != 'SUCCESS') {
+            Log::record($wxOrder, 'error');
+            Log::record('获取预支付订单失败', 'error');
+        }
+        //记录prepay_id
+        $this->recordPreOrder($wxOrder);
+        $signature = $this->sign($wxOrder);
+        return $signature;
+    }
+
+    /*
+     * 生成签名
+     * @param array $wxOrder
+     */
+    private function sign($wxOrder)
+    {
+        $jsApiData = new \WxPayJsApiPay();
+        $jsApiData->SetAppid(config('wx.app_id'));
+        $jsApiData->SetTimeStamp((string)time());
+
+        $rand = md5(time() . mt_rand(0, 1000));
+        $jsApiData->SetNonceStr($rand);
+        $jsApiData->SetPackage('prepay_id=' . $wxOrder['prepay_id']);
+        $jsApiData->SetSignType('md5');
+
+        $sign = $jsApiData->MakeSign();
+        $rawValues = $jsApiData->GetValues();
+        $rawValues['paySign'] = $sign;
+
+        unset($rawValues['appId']);
+        return $rawValues;
+    }
+
+    /*
+     * 将prepay_id写入到对应的订单信息表中，用于后面给用户推送模板信息
+     */
+    private function recordPreOrder($wxOrder)
+    {
+        OrderModel::where('id', '=', $this->orderID)->update(['prepay_id' => $wxOrder['prepay_id']]);
     }
 
     /*
