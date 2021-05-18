@@ -7,6 +7,7 @@ use app\api\model\Order as OrderModel;
 use app\api\model\Product;
 use app\api\service\Order as OrderService;
 use app\lib\enum\OrderStatusEnum;
+use think\Db;
 use think\Exception;
 use think\Loader;
 use think\Log;
@@ -22,8 +23,9 @@ class WxNotify extends \WxPayNotify
     {
         if ($data['result_code'] == 'SUCCESS') {
             $orderNo = $data['out_trade_no'];
+            Db::startTrans();
             try {
-                $order = OrderModel::where('order_no', '=', $orderNo)->find();
+                $order = OrderModel::where('order_no', '=', $orderNo)->lock(true)->find();
                 if ($order['status'] == OrderStatusEnum::UNPAID) {
                     $service = new OrderService();
                     $stockStatus = $service->checkOrderStock($order->id);
@@ -35,10 +37,11 @@ class WxNotify extends \WxPayNotify
                     }
                 }
 
+                Db::commit();
                 return true;
 
             } catch (Exception $e) {
-
+                Db::rollback();
                 Log::error($e);
                 return false;
             }
